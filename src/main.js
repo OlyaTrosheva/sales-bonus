@@ -157,6 +157,21 @@ function analyzeSalesData(data, options) {
     return { ...seller, bonus };
   });
 
+  const top_products = Object.entries(seller.products_sold)
+    .map(([sku, quantity]) => ({ sku, quantity }))
+    .sort((a, b) => b.quantity - a.quantity)
+    .slice(0, 10);
+
+  return {
+    seller_id: seller.id,
+    name: seller.name,
+    revenue: +seller.revenue.toFixed(2),
+    profit: +seller.profit.toFixed(2),
+    sales_count: seller.sales_count,
+    top_products,
+    bonus: +bonus.toFixed(2),
+  };
+
   // @TODO: Подготовка итоговой коллекции с нужными полями
   return result;
 }
