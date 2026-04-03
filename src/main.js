@@ -154,8 +154,7 @@ function analyzeSalesData(data, options) {
 
   const result = sortedSellers.map((seller, index) => {
     const bonus = calculateBonus(index, sortedSellers.length, seller);
-    return { ...seller, bonus };
-  });
+  /* return { ...seller, bonus }; */
 
   const top_products = Object.entries(seller.products_sold)
     .map(([sku, quantity]) => ({ sku, quantity }))
@@ -171,6 +170,7 @@ function analyzeSalesData(data, options) {
     top_products,
     bonus: +bonus.toFixed(2),
   };
+  });
 
   // @TODO: Подготовка итоговой коллекции с нужными полями
   return result;
