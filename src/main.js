@@ -111,6 +111,10 @@ function analyzeSalesData(data, options) {
   purchase_records.forEach((record) => {
     const seller = sellerStats[record.seller_id];
 
+    if (!seller) {
+      throw new Error(`Продавец ${record.seller_id} не найден`);
+    }
+
     seller.sales_count += 1;
 
     record.items.forEach((item) => {
@@ -127,6 +131,9 @@ function analyzeSalesData(data, options) {
       seller.revenue += revenue;
       seller.profit += profit;
 
+      seller.revenue = Math.round(seller.revenue * 100) / 100;
+      seller.profit = Math.round(seller.profit * 100) / 100;
+
       if (!seller.products_sold[item.sku]) {
         seller.products_sold[item.sku] = 0;
       }
@@ -137,7 +144,7 @@ function analyzeSalesData(data, options) {
 
   // @TODO: Сортировка продавцов по прибыли
   const sortedSellers = Object.values(sellerStats).sort(
-    (a, b) => b.profit - a.profit
+    (a, b) => b.profit - a.profit,
   );
   // @TODO: Назначение премий на основе ранжирования
   const result = sortedSellers.map((seller, index) => {
@@ -146,10 +153,15 @@ function analyzeSalesData(data, options) {
 
     const top_products = Object.entries(seller.products_sold)
       .map(([sku, quantity]) => ({ sku, quantity }))
-      .sort((a, b) => b.quantity - a.quantity)
+      .sort((a, b) => {
+        if (b.quantity !== a.quantity) {
+          return b.quantity - a.quantity;
+        }
+        return a.sku.localeCompare(b.sku);
+      })
       .slice(0, 10);
 
-   /* const roundedProfit = Math.round(seller.profit * 100) / 100;
+    /* const roundedProfit = Math.round(seller.profit * 100) / 100;
     const roundedRevenue = Math.round(seller.revenue * 100) / 100;
     const roundedBonus = Math.round(bonus * 100) / 100; */
 
