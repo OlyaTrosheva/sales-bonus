@@ -148,8 +148,13 @@ function analyzeSalesData(data, options) {
   );
   // @TODO: Назначение премий на основе ранжирования
   const result = sortedSellers.map((seller, index) => {
-    const bonus = calculateBonus(index, sortedSellers.length, seller);
-    /* return { ...seller, bonus }; */
+    const normalizedSeller = {
+      ...seller,
+      revenue: Math.round(seller.revenue * 100) / 100,
+      profit: Math.round(seller.profit * 100) / 100,
+    };
+
+    const bonus = calculateBonus(index, sortedSellers.length, normalizedSeller);
 
     const top_products = Object.entries(seller.products_sold)
       .map(([sku, quantity]) => ({ sku, quantity }))
@@ -161,15 +166,11 @@ function analyzeSalesData(data, options) {
       })
       .slice(0, 10);
 
-    /* const roundedProfit = Math.round(seller.profit * 100) / 100;
-    const roundedRevenue = Math.round(seller.revenue * 100) / 100;
-    const roundedBonus = Math.round(bonus * 100) / 100; */
-
     return {
       seller_id: seller.id,
       name: seller.name,
-      revenue: +seller.revenue.toFixed(2),
-      profit: +seller.profit.toFixed(2),
+      revenue: +normalizedSeller.revenue.toFixed(2),
+      profit: +normalizedSeller.profit.toFixed(2),
       sales_count: seller.sales_count,
       top_products,
       bonus: +bonus.toFixed(2),
