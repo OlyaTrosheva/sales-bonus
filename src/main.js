@@ -124,25 +124,33 @@ function analyzeSalesData(data, options) {
   const productsMap = {};
 
   products.forEach((product) => {
-    productsMap[product.id] = product;
+    productsMap[product.sku] = product;
   });
 
   // @TODO: Расчет выручки и прибыли для каждого продавца
 
-  purchase_records.forEach((record) => {
-    const seller = sellerStats[record.seller_id];
-    record.items.forEach((item) => {
-      const product = productsMap[item.product_id];
-      const revenue = calculateRevenue(item, product);
-      seller.revenue += revenue;
-      seller.profit += revenue;
-      seller.sales_count += item.quantity;
-      if (!seller.products_sold[item.product_id]) {
-        seller.products_sold[item.product_id] = 0;
-      }
-      seller.products_sold[item.product_id] += item.quantity;
-    });
+ purchase_records.forEach((record) => {
+  const seller = sellerStats[record.seller_id];
+
+  seller.sales_count += 1;
+
+  record.items.forEach((item) => {
+    const product = productsMap[item.sku];
+
+    const revenue = calculateRevenue(item, product);
+    const cost = product.purchase_price * item.quantity;
+    const profit = revenue - cost;
+
+    seller.revenue += revenue;
+    seller.profit += profit;
+
+    if (!seller.products_sold[item.sku]) {
+      seller.products_sold[item.sku] = 0;
+    }
+
+    seller.products_sold[item.sku] += item.quantity;
   });
+});
 
   // @TODO: Сортировка продавцов по прибыли
 
