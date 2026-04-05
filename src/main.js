@@ -29,25 +29,23 @@ function calculateSimpleRevenue(purchase, _product) {
  */
 function calculateBonusByProfit(index, total, seller) {
   // @TODO: Расчет бонуса от позиции в рейтинге
-  const { profit } = seller;
+  const profit = Math.round(seller.profit * 100) / 100; // округляем profit
+  let bonus;
 
-  // 1 место (index 0)
   if (index === 0) {
-    return profit * 0.15;
+    bonus = profit * 0.15;
+  } else if (index === 1 || index === 2) {
+    bonus = profit * 0.1;
+  } else if (index === total - 1) {
+    bonus = 0;
+  } else {
+    bonus = profit * 0.05;
   }
 
-  // 2 и 3 место (index 1 и 2)
-  if (index === 1 || index === 2) {
-    return profit * 0.1;
-  }
+  // округляем бонус до двух знаков
+  bonus = Math.round(bonus * 100) / 100;
 
-  // последнее место
-  if (index === total - 1) {
-    return 0;
-  }
-
-  // все остальные
-  return profit * 0.05;
+  return bonus;
 }
 
 /**
