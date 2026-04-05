@@ -120,9 +120,9 @@ function analyzeSalesData(data, options) {
         throw new Error(`Продукт с SKU ${item.sku} не найден`);
       }
 
-      const revenue = +calculateRevenue(item, product).toFixed(2);
-      const cost = +(product.purchase_price * item.quantity).toFixed(2);
-      const profit = +(revenue - cost).toFixed(2);
+      const revenue = calculateRevenue(item, product);
+      const cost = product.purchase_price * item.quantity;
+      const profit = revenue - cost;
 
       seller.revenue += revenue;
       seller.profit += profit;
