@@ -167,6 +167,10 @@ function analyzeSalesData(data, options) {
     .sort((a, b) => b.quantity - a.quantity)
     .slice(0, 10);
 
+  const roundedProfit = Math.round(seller.profit * 100) / 100;
+  const roundedRevenue = Math.round(seller.revenue * 100) / 100;
+  const roundedBonus = Math.round(bonus * 100) / 100;
+
   return {
     seller_id: seller.id,
     name: seller.name,
