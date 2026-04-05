@@ -116,6 +116,8 @@ function analyzeSalesData(data, options) {
     }
 
     seller.sales_count += 1;
+    // ВОТ ЭТО ТЫ ПРОПУСТИЛА
+    seller.revenue += record.total_amount;
 
     record.items.forEach((item) => {
       const product = productsMap[item.sku];
@@ -128,7 +130,7 @@ function analyzeSalesData(data, options) {
       const cost = product.purchase_price * item.quantity;
       const profit = revenue - cost;
 
-      seller.revenue += revenue;
+     /* seller.revenue += revenue; */
       seller.profit += profit;
 
       seller.revenue = Math.round(seller.revenue * 100) / 100;
