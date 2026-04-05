@@ -5,7 +5,13 @@
  * @returns {number}
  */
 function calculateSimpleRevenue(purchase, _product) {
-  // @TODO: Расчет выручки от операции
+  const { discount, sale_price, quantity } = purchase;
+  const discountRate = 1 - discount / 100;
+
+  return sale_price * quantity * discountRate;
+}
+
+/* // @TODO: Расчет выручки от операции
   const { discount, sale_price, quantity } = purchase;
 
   // переводим скидку в число
@@ -18,7 +24,7 @@ function calculateSimpleRevenue(purchase, _product) {
   const revenue = totalPrice * (1 - discountRate);
 
   return revenue;
-}
+} */
 
 /**
  * Функция для расчета бонусов
@@ -28,6 +34,24 @@ function calculateSimpleRevenue(purchase, _product) {
  * @returns {number}
  */
 function calculateBonusByProfit(index, total, seller) {
+  const { profit } = seller;
+
+  if (index === 0) {
+    return profit * 0.15;
+  }
+
+  if (index === 1 || index === 2) {
+    return profit * 0.1;
+  }
+
+  if (index === total - 1) {
+    return 0;
+  }
+
+  return profit * 0.05;
+}
+
+/*
   // @TODO: Расчет бонуса от позиции в рейтинге
   const profit = Math.round(seller.profit * 100) / 100; // округляем profit
   let bonus;
@@ -47,6 +71,7 @@ function calculateBonusByProfit(index, total, seller) {
 
   return bonus;
 }
+  */
 
 /**
  * Функция для анализа данных продаж
@@ -130,7 +155,7 @@ function analyzeSalesData(data, options) {
   });
 
   const sortedSellers = Object.values(sellerStats).sort(
-    (a, b) => b.profit - a.profit
+    (a, b) => b.profit - a.profit,
   );
 
   return sortedSellers.map((seller, index) => {
