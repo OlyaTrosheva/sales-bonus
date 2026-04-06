@@ -128,8 +128,8 @@ function analyzeSalesData(data, options) {
       const cost = product.purchase_price * item.quantity;
       const profit = revenue - cost;
 
-      seller.revenue += revenue;
-      seller.profit += profit;
+      seller.revenue = Math.round((seller.revenue + revenue) * 100) / 100;
+      seller.profit = Math.round((seller.profit + profit) * 100) / 100;
 
       if (!seller.products_sold[item.sku]) {
         seller.products_sold[item.sku] = 0;
@@ -170,11 +170,11 @@ function analyzeSalesData(data, options) {
       seller_id: seller.id,
       name: seller.name,
       // Округляем до 2 знаков ТОЛЬКО здесь при выводе
-      revenue: +seller.revenue.toFixed(2),
-      profit: +seller.profit.toFixed(2),
+      revenue: +seller.revenue,
+      profit: +seller.profit,
       sales_count: seller.sales_count,
       top_products,
-      bonus: +bonus.toFixed(2),
+      bonus: Math.round(bonus * 100) / 100,
     };
   });
   // @TODO: Подготовка итоговой коллекции с нужными полями
