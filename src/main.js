@@ -107,6 +107,7 @@ function analyzeSalesData(data, options) {
   products.forEach((product) => {
     productsMap[product.sku] = product;
   });
+
   // @TODO: Расчет выручки и прибыли для каждого продавца
   purchase_records.forEach((record) => {
     const seller = sellerStats[record.seller_id];
@@ -144,6 +145,7 @@ function analyzeSalesData(data, options) {
   const sortedSellers = Object.values(sellerStats).sort(
     (a, b) => b.profit - a.profit,
   );
+
   // @TODO: Назначение премий на основе ранжирования
 
   return sortedSellers.map((seller, index) => {
