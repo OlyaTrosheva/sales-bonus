@@ -29,7 +29,7 @@ function calculateSimpleRevenue(purchase, _product) {
  */
 function calculateBonusByProfit(index, total, seller) {
   // @TODO: Расчет бонуса от позиции в рейтинге
-  const profit = Math.round(seller.profit * 100) / 100; // округляем profit
+  const { profit } = seller;
   let bonus;
 
   if (index === 0) {
@@ -140,11 +140,6 @@ function analyzeSalesData(data, options) {
     });
   });
 
-  Object.values(sellerStats).forEach((seller) => {
-    seller.revenue = Math.round(seller.revenue * 100) / 100;
-    seller.profit = Math.round(seller.profit * 100) / 100;
-  });
-
   // @TODO: Сортировка продавцов по прибыли
   const sortedSellers = Object.values(sellerStats).sort(
     (a, b) => b.profit - a.profit,
@@ -172,14 +167,11 @@ function analyzeSalesData(data, options) {
     return {
       seller_id: seller.id,
       name: seller.name,
-      revenue: Math.round(normalizedSeller.revenue),
-      profit: Math.round(normalizedSeller.profit),
+      revenue: +seller.revenue.toFixed(2),
+      profit: +seller.profit.toFixed(2),
       sales_count: seller.sales_count,
-      top_products: top_products.map((p) => ({
-        sku: p.sku,
-        quantity: Math.round(p.quantity),
-      })),
-      bonus: Math.round(bonus),
+      top_products,
+      bonus: +bonus.toFixed(2),
     };
   });
 
