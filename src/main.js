@@ -160,8 +160,8 @@ function analyzeSalesData(data, options) {
       seller_id: seller.id,
       name: seller.name,
       // Округляем до 2 знаков ТОЛЬКО здесь при выводе
-      revenue: Math.round(seller.revenue * 100) / 100,
-      profit: Math.round(seller.profit * 100) / 100,
+      revenue: Number(seller.revenue.toFixed(2)),
+      profit: Number(seller.profit.toFixed(2)),
       sales_count: seller.sales_count,
       top_products,
       bonus: Math.round(bonus * 100) / 100,
