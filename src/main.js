@@ -159,8 +159,10 @@ function analyzeSalesData(data, options) {
     const top_products = Object.entries(seller.products_sold)
       .map(([sku, quantity]) => ({ sku, quantity }))
       .sort((a, b) => {
-        if (b.quantity !== a.quantity) return b.quantity - a.quantity;
-        return b.sku.localeCompare(a.sku);
+        if (b.quantity !== a.quantity) {
+          return b.quantity - a.quantity;
+        }
+        return a.sku > b.sku ? 1 : -1;
       })
       .slice(0, 10);
 
