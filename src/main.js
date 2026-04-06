@@ -154,7 +154,7 @@ function analyzeSalesData(data, options) {
       .map(([sku, quantity]) => ({ sku, quantity }))
       .sort((a, b) => {
         if (b.quantity !== a.quantity) return b.quantity - a.quantity;
-        return a.sku.localeCompare(b.sku);
+        return b.sku.localeCompare(a.sku);
       })
       .slice(0, 10);
 
