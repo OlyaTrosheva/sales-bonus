@@ -60,7 +60,6 @@ function analyzeSalesData(data, options) {
   if (!data) {
     throw new Error("Нет данных");
   }
-
   const { sellers, products, purchase_records } = data;
 
   if (!Array.isArray(sellers) || sellers.length === 0) {
@@ -170,7 +169,5 @@ function analyzeSalesData(data, options) {
       bonus: +bonus.toFixed(2),
     };
   });
-
   // @TODO: Подготовка итоговой коллекции с нужными полями
-  return result;
 }
