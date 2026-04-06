@@ -153,12 +153,7 @@ function analyzeSalesData(data, options) {
     // Составляем топ-продаж
     const top_products = Object.entries(seller.products_sold)
       .map(([sku, quantity]) => ({ sku, quantity }))
-      .sort((a, b) => {
-        if (b.quantity !== a.quantity) {
-          return b.quantity - a.quantity;
-        }
-        return a.sku.localeCompare(b.sku, undefined, { numeric: true });
-      })
+      .sort((a, b) => b.quantity - a.quantity)
       .slice(0, 10);
 
     return {
