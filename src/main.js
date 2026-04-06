@@ -140,6 +140,12 @@ function analyzeSalesData(data, options) {
   });
 
   // @TODO: Сортировка продавцов по прибыли
+
+  Object.values(sellerStats).forEach((seller) => {
+    seller.revenue = Math.round(seller.revenue * 100) / 100;
+    seller.profit = Math.round(seller.profit * 100) / 100;
+  });
+
   const sortedSellers = Object.values(sellerStats).sort(
     (a, b) => b.profit - a.profit,
   );
