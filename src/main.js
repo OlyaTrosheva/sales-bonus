@@ -128,8 +128,8 @@ function analyzeSalesData(data, options) {
       const cost = product.purchase_price * item.quantity;
       const profit = revenue - cost;
 
-      seller.revenue = Math.round((seller.revenue + revenue) * 100) / 100;
-      seller.profit = Math.round((seller.profit + profit) * 100) / 100;
+      seller.revenue += revenue;
+      seller.profit += profit;
 
       if (!seller.products_sold[item.sku]) {
         seller.products_sold[item.sku] = 0;
@@ -140,11 +140,6 @@ function analyzeSalesData(data, options) {
   });
 
   // @TODO: Сортировка продавцов по прибыли
-
-  Object.values(sellerStats).forEach((seller) => {
-    seller.revenue = Math.round(seller.revenue * 100) / 100;
-    seller.profit = Math.round(seller.profit * 100) / 100;
-  });
 
   const sortedSellers = Object.values(sellerStats).sort(
     (a, b) => b.profit - a.profit,
@@ -162,7 +157,7 @@ function analyzeSalesData(data, options) {
         if (b.quantity !== a.quantity) {
           return b.quantity - a.quantity;
         }
-        return a.sku > b.sku ? 1 : -1;
+        return a.sku.localeCompare(b.sku, undefined, { numeric: true });
       })
       .slice(0, 10);
 
@@ -170,8 +165,8 @@ function analyzeSalesData(data, options) {
       seller_id: seller.id,
       name: seller.name,
       // Округляем до 2 знаков ТОЛЬКО здесь при выводе
-      revenue: +seller.revenue,
-      profit: +seller.profit,
+      revenue: Math.round(seller.revenue * 100) / 100,
+      profit: Math.round(seller.profit * 100) / 100,
       sales_count: seller.sales_count,
       top_products,
       bonus: Math.round(bonus * 100) / 100,
