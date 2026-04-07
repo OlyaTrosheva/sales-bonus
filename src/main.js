@@ -6,18 +6,7 @@
  */
 function calculateSimpleRevenue(purchase, _product) {
   // @TODO: Расчет выручки от операции
-  const { discount, sale_price, quantity } = purchase;
-
-  // переводим скидку в число
-  const discountRate = discount / 100;
-
-  // полная стоимость
-  const totalPrice = sale_price * quantity;
-
-  // итог с учетом скидки
-  const revenue = totalPrice * (1 - discountRate);
-
-  return revenue;
+  return sale_price * quantity * (1 - discount / 100);
 }
 
 /**
@@ -125,14 +114,14 @@ function analyzeSalesData(data, options) {
         throw new Error(`Продукт с SKU ${item.sku} не найден`);
       }
 
-      const revenue = Math.round(calculateRevenue(item, product) * 100) / 100;
-const cost = Math.round(product.purchase_price * item.quantity * 100) / 100;
-const profit = Math.round((revenue - cost) * 100) / 100;
+      const revenue = calculateRevenue(item, product);
+      const cost = product.purchase_price * item.quantity;
+      const profit = revenue - cost;
 
       seller.revenue += revenue;
-      seller.profit += profit; 
+      seller.profit += profit;
 
-     /* seller.revenue = Math.round((seller.revenue + revenue) * 100) / 100;
+      /* seller.revenue = Math.round((seller.revenue + revenue) * 100) / 100;
       seller.profit = Math.round((seller.profit + profit) * 100) / 100; */
 
       if (!seller.products_sold[item.sku]) {
