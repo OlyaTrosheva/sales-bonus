@@ -129,11 +129,16 @@ function analyzeSalesData(data, options) {
 
       const discount = item.discount || 0;
 
-      const revenue = product.sale_price * item.quantity * (1 - discount);
-      const profit =
-        (product.sale_price - product.purchase_price) *
-        item.quantity *
-        (1 - discount);
+      const salePrice = Number(product.sale_price);
+      const purchasePrice = Number(product.purchase_price);
+      const quantity = Number(item.quantity);
+
+      if (isNaN(salePrice) || isNaN(purchasePrice) || isNaN(quantity)) {
+        throw new Error(`Некорректные числовые данные для SKU ${item.sku}`);
+      }
+
+      const revenue = salePrice * quantity * (1 - discount);
+      const profit = (salePrice - purchasePrice) * quantity * (1 - discount);
 
       seller.revenue += revenue;
       seller.profit += profit;
