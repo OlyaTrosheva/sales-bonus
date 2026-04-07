@@ -99,6 +99,7 @@ function analyzeSalesData(data, options) {
   });
 
   // @TODO: Расчет выручки и прибыли для каждого продавца
+
   purchase_records.forEach((record) => {
     const seller = sellerStats[record.seller_id];
 
@@ -115,27 +116,27 @@ function analyzeSalesData(data, options) {
         throw new Error(`Продукт с SKU ${item.sku} не найден`);
       }
 
-      if (typeof product.price !== "number" || typeof product.purchase_price !== "number") {
-  throw new Error(`Цена или закупка не число для SKU ${item.sku}`);
-}
-if (typeof item.quantity !== "number") {
-  throw new Error(`Количество не число для SKU ${item.sku}`);
-}
+      if (
+        typeof product.sale_price !== "number" ||
+        typeof product.purchase_price !== "number"
+      ) {
+        throw new Error(`Цена или закупка не число для SKU ${item.sku}`);
+      }
+
+      if (typeof item.quantity !== "number") {
+        throw new Error(`Количество не число для SKU ${item.sku}`);
+      }
 
       const discount = item.discount || 0;
 
-      const revenue = product.price * item.quantity * (1 - discount);
-
+      const revenue = product.sale_price * item.quantity * (1 - discount);
       const profit =
-        (product.price - product.purchase_price) *
+        (product.sale_price - product.purchase_price) *
         item.quantity *
         (1 - discount);
 
       seller.revenue += revenue;
       seller.profit += profit;
-
-      /* seller.revenue = Math.round((seller.revenue + revenue) * 100) / 100;
-      seller.profit = Math.round((seller.profit + profit) * 100) / 100; */
 
       if (!seller.products_sold[item.sku]) {
         seller.products_sold[item.sku] = 0;
