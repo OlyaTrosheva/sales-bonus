@@ -115,9 +115,14 @@ function analyzeSalesData(data, options) {
         throw new Error(`Продукт с SKU ${item.sku} не найден`);
       }
 
-     const revenue = Number(calculateRevenue(item, product).toFixed(2));
-const cost = Number((product.purchase_price * item.quantity).toFixed(2));
-const profit = Number((revenue - cost).toFixed(2));
+      const discount = item.discount || 0;
+
+      const revenue = product.price * item.quantity * (1 - discount);
+
+      const profit =
+        (product.price - product.purchase_price) *
+        item.quantity *
+        (1 - discount);
 
       seller.revenue += revenue;
       seller.profit += profit;
@@ -156,7 +161,7 @@ const profit = Number((revenue - cost).toFixed(2));
       name: seller.name,
       // Округляем до 2 знаков ТОЛЬКО здесь при выводе
       revenue: Number(seller.revenue.toFixed(2)),
-profit: Number(seller.profit.toFixed(2)),
+      profit: Number(seller.profit.toFixed(2)),
       sales_count: seller.sales_count,
       top_products,
       bonus: Math.round(bonus * 100) / 100,
