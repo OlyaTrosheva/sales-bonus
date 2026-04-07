@@ -115,6 +115,13 @@ function analyzeSalesData(data, options) {
         throw new Error(`Продукт с SKU ${item.sku} не найден`);
       }
 
+      if (typeof product.price !== "number" || typeof product.purchase_price !== "number") {
+  throw new Error(`Цена или закупка не число для SKU ${item.sku}`);
+}
+if (typeof item.quantity !== "number") {
+  throw new Error(`Количество не число для SKU ${item.sku}`);
+}
+
       const discount = item.discount || 0;
 
       const revenue = product.price * item.quantity * (1 - discount);
